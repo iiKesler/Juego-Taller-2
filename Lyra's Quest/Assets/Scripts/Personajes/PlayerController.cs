@@ -8,26 +8,42 @@ namespace Personajes
     public class PlayerController : MonoBehaviour
     {
         public float walkSpeed = 5f;
-        Vector2 moveInput;
+        private Vector2 _moveInput;
 
-        private Rigidbody2D rb;
-        public bool IsMoving { get; set; }
+        private bool _isMoving = false;
+
+        private Rigidbody2D _rb;
+
+        private Animator _animator;
+
+        public bool IsMoving
+        {
+            get
+            {
+                return _isMoving;
+            } private set
+            {
+                _isMoving = value;
+                _animator.SetBool("isMoving", value);
+            }
+        }
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody2D>();
+            _rb = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
         }
         
         private void FixedUpdate()
         {
-            rb.velocity = new Vector2(moveInput.x * walkSpeed, rb.velocity.y);
+            _rb.velocity = new Vector2(_moveInput.x * walkSpeed, _rb.velocity.y);
         }
 
         public void OnMove(InputAction.CallbackContext context)
         {
-            moveInput = context.ReadValue<Vector2>();
+            _moveInput = context.ReadValue<Vector2>();
 
-            IsMoving = moveInput != Vector2.zero;
+            IsMoving = _moveInput != Vector2.zero;
         }
 
     }
