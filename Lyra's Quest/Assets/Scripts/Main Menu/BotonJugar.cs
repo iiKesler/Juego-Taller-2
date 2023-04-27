@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BotonJugar : MonoBehaviour
+namespace Main_Menu
 {
-    public int gameStartScene;
-    
-    public void StartGame()
+    public class BotonJugar : MonoBehaviour
     {
-        SceneManager.LoadScene(gameStartScene);
+        public int gameStartScene;
+    
+        public void StartGame()
+        {
+            SceneManager.LoadScene(gameStartScene);
+        }
     }
 }

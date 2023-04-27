@@ -45,7 +45,6 @@ namespace Personajes
             }
         }
         
-        
         [FormerlySerializedAs("_isMoving")] [SerializeField]
         private bool isMoving;
 
@@ -71,7 +70,17 @@ namespace Personajes
                 _animator.SetBool(AnimationStrings.IsRunning, value);
             }
         }
-        
+
+        private bool CanMove => _animator.GetBool(AnimationStrings.CanMove);
+
+        private bool IsAlive => _animator.GetBool(AnimationStrings.IsAlive);
+
+        private bool LockVelocity
+        {
+            get => _animator.GetBool(AnimationStrings.LockVelocity);
+            set => _animator.SetBool(AnimationStrings.LockVelocity, value);
+        }
+
         private Rigidbody2D _rb;
         private Animator _animator;
 
@@ -85,19 +94,30 @@ namespace Personajes
         private void FixedUpdate()
         {
             var velocity = _rb.velocity;
-            velocity = new Vector2(_moveInput.x * CurrentMoveSpeed, velocity.y);
-            _rb.velocity = velocity;
-
+            
+            if (!LockVelocity)
+            {
+                velocity = new Vector2(_moveInput.x * CurrentMoveSpeed, velocity.y);
+                _rb.velocity = velocity;
+            }
+            
             _animator.SetFloat(AnimationStrings.YVelocity, velocity.y);
         }
-
+        
         public void OnMove(InputAction.CallbackContext context)
         {
             _moveInput = context.ReadValue<Vector2>();
 
-            IsMoving = _moveInput != Vector2.zero;
+            if (IsAlive)
+            {
+                IsMoving = _moveInput != Vector2.zero;
 
-            SetFacingDirecion(_moveInput);
+                SetFacingDirecion(_moveInput);
+            }
+            else
+            {
+                isMoving = false;
+            }
         }
         
 
@@ -144,11 +164,9 @@ namespace Personajes
         public void OnJump(InputAction.CallbackContext context)
         {
             //Revisar si esta vivo tambien
-            if (context.started && _touchingDirection.IsGrounded && CanMove)
-            {
-                _animator.SetTrigger(AnimationStrings.JumpTrigger);
-                _rb.velocity = new Vector2(_rb.velocity.x, jumpImpulse);
-            }
+            if (!context.started || !_touchingDirection.IsGrounded || !CanMove) return;
+            _animator.SetTrigger(AnimationStrings.JumpTrigger);
+            _rb.velocity = new Vector2(_rb.velocity.x, jumpImpulse);
         }
         
         public void OnAttack(InputAction.CallbackContext context)
@@ -158,7 +176,16 @@ namespace Personajes
                 _animator.SetTrigger(AnimationStrings.AttackTrigger);
             }
         }
- 
-        public bool CanMove => _animator.GetBool(AnimationStrings.CanMove);
+
+        public void OnHit(int damage, Vector2 knockback)
+        {
+            LockVelocity = true;
+            _rb.velocity = new Vector2(knockback.x, _rb.velocity.y + knockback.y);
+        }
+
+        public void OnPause(InputAction.CallbackContext context)
+        {
+            
+        }
     }
 }

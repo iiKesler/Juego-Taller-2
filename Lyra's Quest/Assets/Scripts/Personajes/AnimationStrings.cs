@@ -5,6 +5,7 @@ namespace Personajes
 {
     public class AnimationStrings : MonoBehaviour
     {
+        internal const string LockVelocity = "lockVelocity";
         internal const string JumpTrigger = "jump";
         internal const string IsGrounded = "isGrounded";
         internal const string IsRunning = "isRunning";
@@ -14,5 +15,7 @@ namespace Personajes
         internal const string IsOnCeiling = "isOnCeiling";
         internal const string AttackTrigger = "attack";
         internal const string CanMove = "canMove";
+        internal const string IsAlive = "isAlive";
+        internal const string HitTrigger = "hit";
     }
 }
