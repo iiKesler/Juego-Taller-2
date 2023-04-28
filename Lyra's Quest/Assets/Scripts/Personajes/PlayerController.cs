@@ -1,3 +1,4 @@
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -11,6 +12,8 @@ namespace Personajes
         public float runSpeed = 8f;
         public float airWalkSpeed = 4.3f;
         public float jumpImpulse = 10f;
+        public bool isPaused;
+        
         private Vector2 _moveInput;
         private TouchingDirection _touchingDirection;
 
@@ -83,6 +86,7 @@ namespace Personajes
 
         private Rigidbody2D _rb;
         private Animator _animator;
+        private PauseMenu _pauseMenu;
 
         private void Awake()
         {
@@ -171,21 +175,18 @@ namespace Personajes
         
         public void OnAttack(InputAction.CallbackContext context)
         {
+            if (isPaused != false) return;
             if (context.started)
             {
                 _animator.SetTrigger(AnimationStrings.AttackTrigger);
             }
+
         }
 
         public void OnHit(int damage, Vector2 knockback)
         {
             LockVelocity = true;
             _rb.velocity = new Vector2(knockback.x, _rb.velocity.y + knockback.y);
-        }
-
-        public void OnPause(InputAction.CallbackContext context)
-        {
-            
         }
     }
 }

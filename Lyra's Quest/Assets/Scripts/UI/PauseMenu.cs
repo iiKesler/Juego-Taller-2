@@ -7,7 +7,7 @@ namespace UI
 {
     public class PauseMenu : MonoBehaviour
     {
-        public static bool gameIsPaused = false;
+        private static bool _gameIsPaused;
         [FormerlySerializedAs("PauseMenuCanvas")] 
         public GameObject pauseMenuCanvas;
 
@@ -20,7 +20,7 @@ namespace UI
         {
             if(Input.GetKeyDown(KeyCode.Escape))
             {
-                if(gameIsPaused)
+                if(_gameIsPaused)
                 {
                     Play();
                 }
@@ -35,23 +35,19 @@ namespace UI
         {
             pauseMenuCanvas.SetActive(false);
             Time.timeScale = 1f;
-            gameIsPaused = false;
+            _gameIsPaused = false;
         }
 
         private void Stop()
         {
             pauseMenuCanvas.SetActive(true);
             Time.timeScale = 0f;
-            gameIsPaused = true;
+            _gameIsPaused = true;
         }
 
         public void MainMenu()
         {
             SceneManager.LoadScene("MainMenu");
-        }
-
-        public void Resume()
-        {
         }
     }
 }

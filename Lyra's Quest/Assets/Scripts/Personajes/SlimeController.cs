@@ -16,7 +16,7 @@ namespace Personajes
         private enum WalkableDirection { Right, Left }
 
         private WalkableDirection _walkDirection;
-        private Vector2 _walkDirecionVector = Vector2.right;
+        private Vector2 _walkDirecionVector = Vector2.left;
         
         private bool LockVelocity
         {

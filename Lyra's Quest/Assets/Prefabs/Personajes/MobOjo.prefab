@@ -283,8 +283,11 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  maxHealth: 40
-  health: 40
+  healthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  maxHealth: 30
+  health: 30
   isAlive: 1
   isInvincible: 0
   invincibilityTime: 0
