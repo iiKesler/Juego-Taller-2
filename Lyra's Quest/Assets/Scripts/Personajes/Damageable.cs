@@ -49,8 +49,10 @@ namespace Personajes
             set
             {
                 isAlive = value;
-                _animator.SetBool(AnimationStrings.IsAlive, value);
-                
+                if (_animator != null)
+                {
+                    _animator.SetBool(AnimationStrings.IsAlive, value);
+                }
                 if(value == false)
                 {
                     damageableDeath?.Invoke();

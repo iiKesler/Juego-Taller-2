@@ -15,14 +15,14 @@ namespace Personajes
         private enum WalkableDirection { Right, Left }
 
         private WalkableDirection _walkDirection;
-        private Vector2 _walkDirecionVector = Vector2.left;
+        private Vector2 _walkDirecionVector = Vector2.right;
         
         private bool LockVelocity
         {
             get => _animator.GetBool(AnimationStrings.LockVelocity);
             set => _animator.SetBool(AnimationStrings.LockVelocity, value);
         }
-        
+
         private WalkableDirection WalkDirection
         {
             get => _walkDirection;
@@ -66,20 +66,25 @@ namespace Personajes
             }
             _rb.velocity = new Vector2(walkSpeed * _walkDirecionVector.x, _rb.velocity.y);
         }
-        
+
+        // ReSharper disable Unity.PerformanceAnalysis
         private void FlipDirecion()
         {
             if (WalkDirection == WalkableDirection.Right)
             {
                 WalkDirection = WalkableDirection.Left;
             }
-            else if (WalkDirection == WalkableDirection.Left)
+            else if(WalkDirection == WalkableDirection.Left)
             {
                 WalkDirection = WalkableDirection.Right;
             }
+            else
+            {
+                Debug.LogError("Drireccion no valida");
+            }
         }
 
-        private void OnCliffDetected()
+        public void OnCliffDetected()
         {
             if(_touchingDirection.IsGrounded)
                 FlipDirecion();
