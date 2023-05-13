@@ -2,6 +2,7 @@ using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 namespace Personajes
 {
@@ -10,8 +11,8 @@ namespace Personajes
     {
         public float walkSpeed = 5f;
         public float runSpeed = 8f;
-        public float airWalkSpeed = 4.3f;
-        public float jumpImpulse = 10f;
+        public float airWalkSpeed = 5f;
+        public float jumpImpulse = 9f;
         public bool isPaused;
         
         private Vector2 _moveInput;
@@ -87,12 +88,14 @@ namespace Personajes
         private Rigidbody2D _rb;
         private Animator _animator;
         private PauseMenu _pauseMenu;
+        private Damageable _damageable;
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _touchingDirection = GetComponent<TouchingDirection>();
+            _damageable = GetComponent<Damageable>();
         }
         
         private void FixedUpdate()
@@ -106,6 +109,11 @@ namespace Personajes
             }
             
             _animator.SetFloat(AnimationStrings.YVelocity, velocity.y);
+
+            if (IsAlive == false)
+            {
+                OnDying();
+            }
         }
         
         public void OnMove(InputAction.CallbackContext context)
@@ -175,7 +183,7 @@ namespace Personajes
         
         public void OnAttack(InputAction.CallbackContext context)
         {
-            if (isPaused != false) return;
+            if (isPaused) return;
             if (context.started)
             {
                 _animator.SetTrigger(AnimationStrings.AttackTrigger);
@@ -187,6 +195,11 @@ namespace Personajes
         {
             LockVelocity = true;
             _rb.velocity = new Vector2(knockback.x, _rb.velocity.y + knockback.y);
+        }
+
+        private static void OnDying() // Restart game if player dies
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
