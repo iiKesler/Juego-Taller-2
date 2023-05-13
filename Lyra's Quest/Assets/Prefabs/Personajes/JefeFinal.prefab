@@ -188,8 +188,8 @@ MonoBehaviour:
   healthChanged:
     m_PersistentCalls:
       m_Calls: []
-  maxHealth: 100
-  health: 100
+  maxHealth: 200
+  health: 200
   isAlive: 1
   isInvincible: 0
   invincibilityTime: 0.25
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 395fd67f52eb21f4b8ad2c648f21524a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackDamage: 10
+  attackDamage: 30
   knockback: {x: 0, y: 0}
 --- !u!1 &7020497893635419627
 GameObject:

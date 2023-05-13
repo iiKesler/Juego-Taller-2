@@ -22,30 +22,10 @@ namespace Personajes
         {
             get
             {
-                if (CanMove)
-                {
-                    if (IsMoving && !_touchingDirection.IsOnWall)
-                    {
-                        if (_touchingDirection.IsGrounded)
-                        {
-                            if (isRunning)
-                            {
-                                return runSpeed;
-                            }
-
-                            return walkSpeed;
-                        }
-
-                        // En el aire
-                        return airWalkSpeed;
-                    }
-
-                    // Reposo
-                    return 0;
-                }
-
-                // Movimiento desactivado
-                return 0;
+                if (!CanMove) return 0;
+                if (!IsMoving || _touchingDirection.IsOnWall) return 0;
+                if (!_touchingDirection.IsGrounded) return airWalkSpeed;
+                return isRunning ? runSpeed : walkSpeed;
             }
         }
         
@@ -67,7 +47,6 @@ namespace Personajes
 
         private bool IsRunning
         {
-            get => isRunning;
             set
             {
                 isRunning = value;
@@ -88,14 +67,13 @@ namespace Personajes
         private Rigidbody2D _rb;
         private Animator _animator;
         private PauseMenu _pauseMenu;
-        private Damageable _damageable;
 
         private void Awake()
         {
             _rb = GetComponent<Rigidbody2D>();
             _animator = GetComponent<Animator>();
             _touchingDirection = GetComponent<TouchingDirection>();
-            _damageable = GetComponent<Damageable>();
+            GetComponent<Damageable>();
         }
         
         private void FixedUpdate()

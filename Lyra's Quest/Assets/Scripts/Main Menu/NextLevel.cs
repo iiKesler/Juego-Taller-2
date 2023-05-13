@@ -5,11 +5,9 @@ namespace Main_Menu
 {
     public class NextLevel : MonoBehaviour
     {
-        private Collider2D _collider2D;
-    
         private void Awake()
         {
-            _collider2D = GetComponent<Collider2D>();
+            GetComponent<Collider2D>();
         }
     
         private void OnTriggerEnter2D(Collider2D other)
@@ -23,6 +21,7 @@ namespace Main_Menu
                 Debug.Log("No es el jugador o no tiene el tag Player");
             }
         }
+        
     
     }
 }

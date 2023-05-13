@@ -28,7 +28,7 @@ namespace Personajes
         public int Health
         {
             get => health;
-            set
+            private set
             {
                 health = value;
                 healthChanged?.Invoke(health, MaxHealth);

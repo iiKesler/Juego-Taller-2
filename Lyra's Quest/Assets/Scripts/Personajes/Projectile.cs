@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,6 +7,7 @@ namespace Personajes
     public class Projectile : MonoBehaviour
     {
         private Rigidbody2D _rb;
+        public float projectileAlive = 2.5f;
         
         [FormerlySerializedAs("attackDamage")] 
         public int damage = 10;
@@ -21,23 +23,24 @@ namespace Personajes
         {
             _rb.velocity = new Vector2(moveSpeed.x * transform.localScale.x, moveSpeed.y);
         }
-        
+
+        private void FixedUpdate() // Remove projectile after a couple of seconds
+        {
+            Destroy(gameObject, projectileAlive);
+        }
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             var damageable = collision.GetComponent<Damageable>();
 
-            if (damageable != null)
-            {
-                var deliveredKnockback = transform.localScale.x > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
+            if (damageable == null) return;
+            var deliveredKnockback = transform.localScale.x > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
 
-                var gotHit = damageable.Hit(damage, deliveredKnockback);
-                
-                if(gotHit)
-                {
-                    Debug.Log(collision.name + " hit for " + damage);
-                    Destroy(gameObject);
-                }
-            }
+            var gotHit = damageable.Hit(damage, deliveredKnockback);
+
+            if (!gotHit) return;
+            Debug.Log(collision.name + " hit for " + damage);
+            Destroy(gameObject);
         }
     }
 }

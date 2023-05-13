@@ -12,15 +12,13 @@ namespace Personajes
         {
             var damageable = collision.GetComponent<Damageable>();
 
-            if (damageable != null)
-            {
-                var deliveredKnockback = transform.parent.localScale.x > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
+            if (damageable == null) return;
+            var deliveredKnockback = transform.parent.localScale.x > 0 ? knockback : new Vector2(-knockback.x, knockback.y);
 
-                var gotHit = damageable.Hit(attackDamage, deliveredKnockback);
+            var gotHit = damageable.Hit(attackDamage, deliveredKnockback);
                 
-                if(gotHit)
-                    Debug.Log(collision.name + " hit for " + attackDamage);
-            }
+            if(gotHit)
+                Debug.Log(collision.name + " hit for " + attackDamage);
         }
     }
 }
